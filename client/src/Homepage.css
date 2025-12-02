@@ -29,10 +29,24 @@
   text-align: center;
 }
 
+.homepage-logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.homepage-logo-icon {
+  width: 48px;
+  height: 48px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
 .homepage-logo {
   font-size: 48px;
   font-weight: 700;
-  margin: 0 0 8px 0;
+  margin: 0;
   letter-spacing: -1px;
 }
 
@@ -218,6 +232,11 @@
 @media (max-width: 768px) {
   .homepage-header {
     padding: 30px 20px;
+  }
+
+  .homepage-logo-icon {
+    width: 36px;
+    height: 36px;
   }
 
   .homepage-logo {

@@ -105,7 +105,13 @@ function Homepage() {
       </Helmet>
       <div className="homepage-container">
         <div className="homepage-header">
-          <h1 className="homepage-logo">Fastt</h1>
+          <div className="homepage-logo-container">
+            <svg className="homepage-logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+              <path d="M 70 30 L 30 50 L 42 54 L 46 70 L 55 55 L 70 30 Z" fill="white" stroke="white" strokeWidth="2" strokeLinejoin="round"/>
+              <path d="M 42 54 L 55 55" stroke="white" strokeWidth="2"/>
+            </svg>
+            <h1 className="homepage-logo">Fastt</h1>
+          </div>
           <p className="homepage-tagline">fastt.chat</p>
         </div>
         
