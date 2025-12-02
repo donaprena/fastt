@@ -366,9 +366,11 @@
                 let html = '<table><thead><tr><th>Slug</th><th>Title</th><th>Messages</th><th>Users</th><th>Created</th><th>Last Message</th><th>Public</th></tr></thead><tbody>';
                 
                 rooms.forEach(room => {
+                    const titleDisplay = room.title || '-';
+                    const titleLink = room.title ? `<a href="/${room.slug}" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 500;">${titleDisplay}</a>` : titleDisplay;
                     html += `<tr>
                         <td><code>${room.slug}</code></td>
-                        <td>${room.title || '-'}</td>
+                        <td>${titleLink}</td>
                         <td>${room.messageCount || 0}</td>
                         <td>${room.userCount || 0}</td>
                         <td>${formatDate(room.createdAt)}</td>
@@ -511,9 +513,11 @@
                 // Top rooms table
                 let html = '<table><thead><tr><th>Room</th><th>Title</th><th>Messages</th><th>Users</th><th>Last Message</th></tr></thead><tbody>';
                 metrics.topRooms.forEach(room => {
+                    const titleDisplay = room.title || '-';
+                    const titleLink = room.title ? `<a href="/${room.slug}" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 500;">${titleDisplay}</a>` : titleDisplay;
                     html += `<tr>
                         <td><code>${room.slug}</code></td>
-                        <td>${room.title || '-'}</td>
+                        <td>${titleLink}</td>
                         <td><strong>${room.messageCount || 0}</strong></td>
                         <td>${room.userCount || 0}</td>
                         <td>${formatDate(room.lastMessageAt)}</td>
