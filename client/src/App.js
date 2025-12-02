@@ -491,6 +491,30 @@ function App() {
     }
   };
 
+  const showToast = (message) => {
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.cssText = `
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      z-index: 10000;
+      font-size: 14px;
+      animation: slideUp 0.3s ease-out;
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transition = 'opacity 0.3s';
+      setTimeout(() => document.body.removeChild(toast), 300);
+    }, 2000);
+  };
+
   const handleShareMessage = async (message) => {
     // Generate shareable link with message ID
     const shareUrl = `${window.location.origin}${window.location.pathname}?msg=${message.id}`;
@@ -507,10 +531,10 @@ function App() {
       if (navigator.share) {
         await navigator.share(shareData);
       } else {
-        // Fallback: copy link to clipboard
+        // Fallback: copy link to clipboard (desktop)
         if (navigator.clipboard) {
           await navigator.clipboard.writeText(shareUrl);
-          alert('Link copied to clipboard!');
+          showToast('✓ Link copied to clipboard!');
         } else {
           // Fallback for older browsers
           const textArea = document.createElement('textarea');
@@ -519,7 +543,7 @@ function App() {
           textArea.select();
           document.execCommand('copy');
           document.body.removeChild(textArea);
-          alert('Link copied to clipboard!');
+          showToast('✓ Link copied to clipboard!');
         }
       }
     } catch (error) {
@@ -528,7 +552,7 @@ function App() {
         // Fallback to clipboard
         if (navigator.clipboard) {
           await navigator.clipboard.writeText(shareUrl);
-          alert('Link copied to clipboard!');
+          showToast('✓ Link copied to clipboard!');
         }
       }
     }
@@ -549,10 +573,10 @@ function App() {
       if (navigator.share) {
         await navigator.share(shareData);
       } else {
-        // Fallback: copy link to clipboard
+        // Fallback: copy link to clipboard (desktop)
         if (navigator.clipboard) {
           await navigator.clipboard.writeText(chatUrl);
-          alert('Chat link copied to clipboard!');
+          showToast('✓ Chat link copied to clipboard!');
         } else {
           // Fallback for older browsers
           const textArea = document.createElement('textarea');
@@ -561,7 +585,7 @@ function App() {
           textArea.select();
           document.execCommand('copy');
           document.body.removeChild(textArea);
-          alert('Chat link copied to clipboard!');
+          showToast('✓ Chat link copied to clipboard!');
         }
       }
     } catch (error) {
@@ -570,7 +594,7 @@ function App() {
         // Fallback to clipboard
         if (navigator.clipboard) {
           await navigator.clipboard.writeText(chatUrl);
-          alert('Chat link copied to clipboard!');
+          showToast('✓ Chat link copied to clipboard!');
         }
       }
     }
