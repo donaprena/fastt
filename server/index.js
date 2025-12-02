@@ -38,9 +38,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Page view tracking middleware (skip admin routes)
+// Page view tracking middleware (skip admin and API routes)
 app.use((req, res, next) => {
-  if (!req.path.startsWith('/admin') && !req.path.startsWith('/api') && !req.path.startsWith('/uploads')) {
+  // Skip tracking for admin pages, API calls, uploads, and static assets
+  const skipPaths = ['/admin', '/api', '/uploads', '/static', '/favicon', '/logo', '/manifest'];
+  const shouldSkip = skipPaths.some(path => req.path.startsWith(path));
+  
+  if (!shouldSkip) {
     const userAgent = req.get('user-agent');
     const ip = req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for'];
     trackPageView(req.path, userAgent, ip).catch(err => {
