@@ -24,7 +24,7 @@ const API_URL = getApiUrl();
 
 // User ID to display name mapping
 function getUserDisplayName(userId, userNicknames = {}) {
-  if (userId === null || userId === undefined) return 'User ?';
+  if (userId === null || userId === undefined) return 'Anonymous';
   
   // Check if user has a nickname
   if (userNicknames[userId]) {
@@ -32,7 +32,7 @@ function getUserDisplayName(userId, userNicknames = {}) {
   }
   
   // Display userId directly (starts from 0)
-  return `User ${userId}`;
+  return `Anonymous ${userId}`;
 }
 
 function App() {
