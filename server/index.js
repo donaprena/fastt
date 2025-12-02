@@ -13,18 +13,11 @@ const { generateRoomSlug } = require('./utils');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
-  },
-  transports: ['websocket', 'polling'],
-  pingTimeout: 60000,
-  pingInterval: 25000
-});
+const io = socketIo(server, config.socketConfig);
 
-const PORT = process.env.PORT || 3001;
-const ADMIN_API_KEY = process.env.ADMIN_API_KEY || 'admin';
+const config = require('../config');
+const PORT = config.port;
+const ADMIN_API_KEY = config.adminApiKey;
 
 // Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, 'uploads');
@@ -96,14 +89,13 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 10 * 1024 * 1024 // 10MB limit
+    fileSize: config.maxFileSize
   },
   fileFilter: (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|gif|webp/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedTypes.test(file.mimetype);
+    const allowedTypes = config.allowedImageTypes;
+    const mimetype = allowedTypes.includes(file.mimetype);
     
-    if (mimetype && extname) {
+    if (mimetype) {
       return cb(null, true);
     } else {
       cb(new Error('Only image files are allowed!'));

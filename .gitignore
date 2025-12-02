@@ -4,7 +4,6 @@ client/build/
 server/uploads/
 server/chat.db
 server/chat.db-journal
-.env
 .DS_Store
 *.log
 

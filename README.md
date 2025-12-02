@@ -81,17 +81,12 @@ This will:
 - Build the React app
 - Set up PM2 process manager
 
-3. **Configure environment (optional):**
+3. **Configure settings (optional):**
 ```bash
-nano .env
+nano config.js
 ```
 
-Add your settings:
-```env
-PORT=3001
-NODE_ENV=production
-ADMIN_API_KEY=your-secure-api-key
-```
+Edit the configuration as needed (especially `adminApiKey` for production).
 
 4. **Launch the application:**
 ```bash
@@ -159,20 +154,20 @@ PM2 will automatically restart the application.
 
 ## 🔧 Configuration
 
-### Environment Variables
+All settings are in `config.js` - ready to use out of the box!
 
-Create a `.env` file in the root directory:
+```javascript
+module.exports = {
+  port: 3001,
+  adminApiKey: 'admin',  // CHANGE IN PRODUCTION!
+  maxFileSize: 10 * 1024 * 1024,  // 10MB
+  // ... more settings
+};
+```
 
-```env
-# Server Configuration
-PORT=3001
-NODE_ENV=production
-
-# Admin Panel Security
-ADMIN_API_KEY=admin  # Change this in production!
-
-# Optional
-REACT_APP_API_URL=https://your-domain.com
+You can also override with environment variables:
+```bash
+PORT=3001 ADMIN_API_KEY=secret npm start
 ```
 
 ### Admin Panel
@@ -263,9 +258,9 @@ fastt/
 │   │   ├── index.html    # HTML template
 │   │   └── favicon.svg   # Paper airplane logo
 │   └── build/            # Production build
+├── config.js             # Configuration (ready to use!)
 ├── install.sh            # Installation script
 ├── launch.sh             # Launch script
-├── .env.example          # Environment variables template
 └── README.md             # This file
 ```
 
@@ -278,7 +273,7 @@ fastt/
 - No authentication = anonymous users
 
 **Production Checklist:**
-- [ ] Change `ADMIN_API_KEY` from default
+- [ ] Change `adminApiKey` in `config.js` from default
 - [ ] Set up Nginx reverse proxy
 - [ ] Enable SSL with Let's Encrypt
 - [ ] Configure firewall (allow 80, 443)
