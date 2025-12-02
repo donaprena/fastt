@@ -8,7 +8,7 @@ import './Homepage.css';
 const API_URL = process.env.REACT_APP_API_URL || 
   (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
     ? 'http://localhost:3001' 
-    : `http://${window.location.hostname}:3001`);
+    : window.location.origin);
 
 function Homepage() {
   const [rooms, setRooms] = useState([]);

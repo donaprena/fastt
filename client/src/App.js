@@ -15,7 +15,8 @@ const getApiUrl = () => {
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
     return 'http://localhost:3001';
   }
-  return `http://${hostname}:3001`;
+  // In production, use the same origin (Nginx proxies to backend)
+  return window.location.origin;
 };
 
 const API_URL = getApiUrl();
