@@ -24,7 +24,7 @@ const io = socketIo(server, {
 });
 
 const PORT = process.env.PORT || 3001;
-const ADMIN_API_KEY = process.env.ADMIN_API_KEY || 'change-me-in-production';
+const ADMIN_API_KEY = process.env.ADMIN_API_KEY || 'admin';
 
 // Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, 'uploads');
