@@ -24,6 +24,7 @@ const io = socketIo(server, {
 });
 
 const PORT = process.env.PORT || 3001;
+const ADMIN_API_KEY = process.env.ADMIN_API_KEY || 'change-me-in-production';
 
 // Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, 'uploads');
@@ -1075,12 +1076,23 @@ io.on('connection', (socket) => {
   });
 });
 
+// Admin API key middleware
+const requireAdminAuth = (req, res, next) => {
+  const apiKey = req.headers['x-api-key'] || req.query.apiKey;
+  
+  if (!apiKey || apiKey !== ADMIN_API_KEY) {
+    return res.status(401).json({ error: 'Unauthorized. Valid API key required.' });
+  }
+  
+  next();
+};
+
 // Admin routes
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
-app.get('/admin/api/stats', async (req, res) => {
+app.get('/admin/api/stats', requireAdminAuth, async (req, res) => {
   try {
     const stats = await getAdminStats();
     res.json(stats);
@@ -1090,7 +1102,7 @@ app.get('/admin/api/stats', async (req, res) => {
   }
 });
 
-app.get('/admin/api/messages', async (req, res) => {
+app.get('/admin/api/messages', requireAdminAuth, async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 100;
     const messages = await getMessagesStats(limit);
@@ -1101,7 +1113,7 @@ app.get('/admin/api/messages', async (req, res) => {
   }
 });
 
-app.get('/admin/api/rooms', async (req, res) => {
+app.get('/admin/api/rooms', requireAdminAuth, async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 100;
     const rooms = await getRoomsStats(limit);
@@ -1112,7 +1124,7 @@ app.get('/admin/api/rooms', async (req, res) => {
   }
 });
 
-app.get('/admin/api/pageviews', async (req, res) => {
+app.get('/admin/api/pageviews', requireAdminAuth, async (req, res) => {
   try {
     const days = parseInt(req.query.days) || 7;
     const pageViews = await getPageViewsStats(days);
@@ -1123,7 +1135,7 @@ app.get('/admin/api/pageviews', async (req, res) => {
   }
 });
 
-app.get('/admin/api/performance', async (req, res) => {
+app.get('/admin/api/performance', requireAdminAuth, async (req, res) => {
   try {
     const metrics = await getPerformanceMetrics();
     res.json(metrics);

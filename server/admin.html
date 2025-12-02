@@ -220,7 +220,7 @@
         <p>Monitor page views, chats, messages, and overall performance</p>
     </div>
     
-    <div class="container">
+    <div class="container" id="mainContainer" style="display: none;">
         <button class="refresh-btn" onclick="loadAllData()">🔄 Refresh Data</button>
         
         <div class="stats-grid" id="statsGrid">
@@ -296,6 +296,22 @@
     <script>
         let messagesChart = null;
         let pageViewsChart = null;
+        let apiKey = localStorage.getItem('adminApiKey');
+        
+        // Check for API key on load
+        if (!apiKey) {
+            apiKey = prompt('Enter Admin API Key:');
+            if (apiKey) {
+                localStorage.setItem('adminApiKey', apiKey);
+            } else {
+                document.body.innerHTML = '<div style="text-align: center; padding: 50px;"><h2>Access Denied</h2><p>Admin API key required.</p></div>';
+            }
+        }
+        
+        // Show main container after API key is set
+        if (apiKey) {
+            document.getElementById('mainContainer').style.display = 'block';
+        }
         
         async function loadAllData() {
             try {
@@ -313,7 +329,14 @@
         
         async function loadStats() {
             try {
-                const response = await fetch('/admin/api/stats');
+                const response = await fetch('/admin/api/stats', {
+                    headers: { 'X-API-Key': apiKey }
+                });
+                if (response.status === 401) {
+                    localStorage.removeItem('adminApiKey');
+                    alert('Invalid API key. Please refresh and try again.');
+                    return;
+                }
                 const stats = await response.json();
                 
                 document.getElementById('totalUsers').textContent = stats.totalUsers || 0;
@@ -331,7 +354,10 @@
         
         async function loadRooms() {
             try {
-                const response = await fetch('/admin/api/rooms?limit=50');
+                const response = await fetch('/admin/api/rooms?limit=50', {
+                    headers: { 'X-API-Key': apiKey }
+                });
+                if (response.status === 401) return;
                 const rooms = await response.json();
                 
                 let html = '<table><thead><tr><th>Slug</th><th>Title</th><th>Messages</th><th>Users</th><th>Created</th><th>Last Message</th><th>Public</th></tr></thead><tbody>';
@@ -358,7 +384,10 @@
         
         async function loadMessages() {
             try {
-                const response = await fetch('/admin/api/messages?limit=50');
+                const response = await fetch('/admin/api/messages?limit=50', {
+                    headers: { 'X-API-Key': apiKey }
+                });
+                if (response.status === 401) return;
                 const messages = await response.json();
                 
                 let html = '<table><thead><tr><th>ID</th><th>Room</th><th>User</th><th>Text</th><th>Likes</th><th>Timestamp</th></tr></thead><tbody>';
@@ -385,7 +414,10 @@
         
         async function loadPageViews() {
             try {
-                const response = await fetch('/admin/api/pageviews?days=7');
+                const response = await fetch('/admin/api/pageviews?days=7', {
+                    headers: { 'X-API-Key': apiKey }
+                });
+                if (response.status === 401) return;
                 const pageViews = await response.json();
                 
                 const labels = pageViews.map(pv => pv.date).reverse();
@@ -431,7 +463,10 @@
         
         async function loadPerformance() {
             try {
-                const response = await fetch('/admin/api/performance');
+                const response = await fetch('/admin/api/performance', {
+                    headers: { 'X-API-Key': apiKey }
+                });
+                if (response.status === 401) return;
                 const metrics = await response.json();
                 
                 // Messages per day chart
