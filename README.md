@@ -1,8 +1,8 @@
 # Fastt Chat
 
-A high-performance real-time chat application with instant message delivery, image sharing, and real-time collaboration.
+<img src="client/public/favicon.svg" alt="Fastt Chat" width="64" height="64">
 
-![Paper Airplane Logo](client/public/favicon.svg)
+A high-performance real-time chat application with instant message delivery, image sharing, and real-time collaboration.
 
 ## 🚀 Features
 
