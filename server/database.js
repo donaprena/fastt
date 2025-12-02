@@ -1179,6 +1179,56 @@ function getPerformanceMetrics() {
   });
 }
 
+// Delete all data (admin only - dangerous!)
+function deleteAllData() {
+  return new Promise((resolve, reject) => {
+    db.serialize(() => {
+      db.run('DELETE FROM messages', (err) => {
+        if (err) {
+          console.error('Error deleting messages:', err);
+          reject(err);
+          return;
+        }
+      });
+      
+      db.run('DELETE FROM likes', (err) => {
+        if (err) {
+          console.error('Error deleting likes:', err);
+          reject(err);
+          return;
+        }
+      });
+      
+      db.run('DELETE FROM rooms', (err) => {
+        if (err) {
+          console.error('Error deleting rooms:', err);
+          reject(err);
+          return;
+        }
+      });
+      
+      db.run('DELETE FROM users', (err) => {
+        if (err) {
+          console.error('Error deleting users:', err);
+          reject(err);
+          return;
+        }
+      });
+      
+      db.run('DELETE FROM page_views', (err) => {
+        if (err) {
+          console.error('Error deleting page views:', err);
+          reject(err);
+          return;
+        }
+        
+        console.log('All data deleted successfully');
+        resolve({ success: true, message: 'All data deleted successfully' });
+      });
+    });
+  });
+}
+
 module.exports = {
   initDatabase,
   saveMessage,
@@ -1207,6 +1257,7 @@ module.exports = {
   getRoomsStats,
   getPageViewsStats,
   getPerformanceMetrics,
+  deleteAllData,
   closeDatabase
 };
 

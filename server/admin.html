@@ -221,7 +221,10 @@
     </div>
     
     <div class="container" id="mainContainer" style="display: none;">
-        <button class="refresh-btn" onclick="loadAllData()">🔄 Refresh Data</button>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button class="refresh-btn" onclick="loadAllData()">🔄 Refresh Data</button>
+            <button class="refresh-btn" onclick="confirmDeleteAllData()" style="background: #e74c3c;">🗑️ Delete All Data</button>
+        </div>
         
         <div class="stats-grid" id="statsGrid">
             <div class="stat-card">
@@ -533,6 +536,43 @@
                 document.getElementById('topUsersTable').innerHTML = html;
             } catch (error) {
                 console.error('Error loading performance:', error);
+            }
+        }
+        
+        async function confirmDeleteAllData() {
+            const confirmed = confirm('⚠️ WARNING: This will permanently delete ALL data including:\n\n• All messages\n• All rooms\n• All users\n• All likes\n• All page views\n\nThis action CANNOT be undone!\n\nType "DELETE" in the next prompt to confirm.');
+            
+            if (!confirmed) return;
+            
+            const confirmText = prompt('Type "DELETE" to confirm deletion of all data:');
+            
+            if (confirmText !== 'DELETE') {
+                alert('Deletion cancelled. Text did not match.');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/admin/api/delete-all-data', {
+                    method: 'POST',
+                    headers: { 'X-API-Key': apiKey }
+                });
+                
+                if (response.status === 401) {
+                    alert('Unauthorized. Invalid API key.');
+                    return;
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('✅ All data has been deleted successfully.');
+                    loadAllData(); // Reload to show empty state
+                } else {
+                    alert('❌ Failed to delete data: ' + (result.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error deleting data:', error);
+                alert('❌ Error deleting data. Check console for details.');
             }
         }
         

@@ -8,7 +8,7 @@ const os = require('os');
 const multer = require('multer');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const { initDatabase, saveMessage, getRecentMessages, getOlderMessages, getMessageById, getMessagesAround, toggleLike, getLikeCount, getLikesForMessages, userLikedMessage, getUserLikedMessages, createRoom, getRoom, getAllRooms, getUserRooms, updateRoomTitle, deleteRoom, getOrCreateUser, updateUserNickname, getUser, trackPageView, getAdminStats, getMessagesStats, getRoomsStats, getPageViewsStats, getPerformanceMetrics } = require('./database');
+const { initDatabase, saveMessage, getRecentMessages, getOlderMessages, getMessageById, getMessagesAround, toggleLike, getLikeCount, getLikesForMessages, userLikedMessage, getUserLikedMessages, createRoom, getRoom, getAllRooms, getUserRooms, updateRoomTitle, deleteRoom, getOrCreateUser, updateUserNickname, getUser, trackPageView, getAdminStats, getMessagesStats, getRoomsStats, getPageViewsStats, getPerformanceMetrics, deleteAllData } = require('./database');
 const { generateRoomSlug } = require('./utils');
 
 const app = express();
@@ -1142,6 +1142,16 @@ app.get('/admin/api/performance', requireAdminAuth, async (req, res) => {
   } catch (error) {
     console.error('Error fetching performance metrics:', error);
     res.status(500).json({ error: 'Failed to fetch performance metrics' });
+  }
+});
+
+app.post('/admin/api/delete-all-data', requireAdminAuth, async (req, res) => {
+  try {
+    const result = await deleteAllData();
+    res.json(result);
+  } catch (error) {
+    console.error('Error deleting all data:', error);
+    res.status(500).json({ error: 'Failed to delete all data' });
   }
 });
 
