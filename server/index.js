@@ -8,6 +8,7 @@ const os = require('os');
 const multer = require('multer');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const config = require('../config');
 const { initDatabase, saveMessage, getRecentMessages, getOlderMessages, getMessageById, getMessagesAround, toggleLike, getLikeCount, getLikesForMessages, userLikedMessage, getUserLikedMessages, createRoom, getRoom, getAllRooms, getUserRooms, updateRoomTitle, deleteRoom, getOrCreateUser, updateUserNickname, getUser, trackPageView, getAdminStats, getMessagesStats, getRoomsStats, getPageViewsStats, getPerformanceMetrics, deleteAllData } = require('./database');
 const { generateRoomSlug } = require('./utils');
 
@@ -15,7 +16,6 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, config.socketConfig);
 
-const config = require('../config');
 const PORT = config.port;
 const ADMIN_API_KEY = config.adminApiKey;
 
