@@ -217,6 +217,13 @@ function App() {
           setMessages(recentMessages);
           // If we got 30 messages, there might be more
           setHasMoreMessages(recentMessages.length >= 30);
+          
+          // Scroll to bottom immediately after loading initial messages
+          setTimeout(() => {
+            if (messagesEndRef.current && !highlightedMessageId) {
+              messagesEndRef.current.scrollIntoView({ behavior: 'auto' });
+            }
+          }, 100);
         }
       });
 
@@ -306,7 +313,7 @@ function App() {
     // Only auto-scroll if we're not highlighting a specific message
     // and we have messages, and we're not loading older messages
     if (!highlightedMessageId && messages.length > 0 && !isLoadingOlderRef.current) {
-      scrollToBottom();
+      scrollToBottom(false); // smooth scroll for new messages
     }
   }, [messages, highlightedMessageId]);
 
@@ -320,8 +327,8 @@ function App() {
     }
   }, [highlightedMessageId, messages]);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToBottom = (instant = false) => {
+    messagesEndRef.current?.scrollIntoView({ behavior: instant ? 'auto' : 'smooth' });
   };
 
   const scrollToMessage = (messageId) => {
