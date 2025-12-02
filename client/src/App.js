@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { QRCodeSVG } from 'qrcode.react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import { getStoredUserId, setStoredUserId } from './utils';
@@ -619,6 +620,28 @@ function App() {
     }
   };
 
+  const handleCopyChatLink = async () => {
+    const chatUrl = `${window.location.origin}${window.location.pathname}`;
+    try {
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(chatUrl);
+        showToast('✓ Link copied!');
+      } else {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = chatUrl;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showToast('✓ Link copied!');
+      }
+    } catch (error) {
+      console.error('Error copying link:', error);
+      showToast('Failed to copy link');
+    }
+  };
+
   const handleLikeMessage = async (messageId, e) => {
     e?.stopPropagation();
     e?.preventDefault();
@@ -670,6 +693,7 @@ function App() {
     }
     
     try {
+      // Save nickname
       await axios.post(`${API_URL}/api/users/${userId}/nickname`, {
         nickname: newNickname || null
       });
@@ -683,12 +707,17 @@ function App() {
           ? { ...msg, username: newNickname || `User ${userId}` }
           : msg
       ));
+
+      // If room creator and chat title changed, save it too
+      if (isRoomCreator && renameInput.trim() && renameInput.trim() !== roomTitle) {
+        await handleRenameRoom();
+      }
       
       setShowSettings(false);
       setSettingsNameInput('');
     } catch (error) {
-      console.error('Error saving nickname:', error);
-      alert('Failed to save nickname. Please try again.');
+      console.error('Error saving settings:', error);
+      alert('Failed to save settings. Please try again.');
     }
   };
 
@@ -865,37 +894,29 @@ function App() {
 
                 <div className="settings-section">
                   <h3>Share Chat</h3>
-                  <p className="settings-hint">
-                    Share this chat link with others to invite them to join
-                  </p>
-                  <div className="settings-share-section">
-                    <input
-                      type="text"
-                      className="settings-input settings-share-input"
+                  <input
+                    type="text"
+                    className="settings-input settings-share-link"
+                    value={`${window.location.origin}${window.location.pathname}`}
+                    readOnly
+                    onClick={handleCopyChatLink}
+                    title="Click to copy link"
+                  />
+                </div>
+
+                <div className="settings-section settings-qr-section">
+                  <div className="qr-code-container">
+                    <QRCodeSVG 
                       value={`${window.location.origin}${window.location.pathname}`}
-                      readOnly
-                      onClick={(e) => e.target.select()}
+                      size={200}
+                      level="M"
+                      includeMargin={true}
                     />
-                    <button 
-                      className="settings-share-button"
-                      onClick={handleShareChat}
-                      title="Share chat link"
-                    >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="18" cy="5" r="3"></circle>
-                        <circle cx="6" cy="12" r="3"></circle>
-                        <circle cx="18" cy="19" r="3"></circle>
-                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                      </svg>
-                      Share
-                    </button>
                   </div>
                 </div>
 
                 {isRoomCreator && (
                   <div className="settings-section settings-room-section">
-                    <h3>Chat Settings</h3>
                     <label htmlFor="rename-input">Chat Title:</label>
                     <input
                       id="rename-input"
@@ -911,21 +932,6 @@ function App() {
                       }}
                       maxLength={100}
                     />
-                    <div className="settings-room-actions">
-                      <button 
-                        className="settings-save-button"
-                        onClick={handleRenameRoom}
-                        disabled={!renameInput.trim()}
-                      >
-                        Rename Chat
-                      </button>
-                      <button 
-                        className="settings-delete-button"
-                        onClick={handleDeleteRoom}
-                      >
-                        Delete Chat
-                      </button>
-                    </div>
                   </div>
                 )}
 
@@ -934,14 +940,16 @@ function App() {
                     className="settings-save-button"
                     onClick={handleSaveSettings}
                   >
-                    Save Name
+                    Save
                   </button>
-                  <button 
-                    className="settings-cancel-button"
-                    onClick={() => setShowSettings(false)}
-                  >
-                    Close
-                  </button>
+                  {isRoomCreator && (
+                    <button 
+                      className="settings-delete-button"
+                      onClick={handleDeleteRoom}
+                    >
+                      Delete
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
