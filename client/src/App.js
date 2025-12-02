@@ -1021,7 +1021,7 @@ function App() {
             id="image-upload"
           />
           <label htmlFor="image-upload" className="upload-button" title="Upload image">
-            📷
+            +
           </label>
           <input
             type="text"
