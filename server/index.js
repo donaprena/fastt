@@ -1138,17 +1138,125 @@ if (process.env.NODE_ENV === 'production') {
   // Serve static files from the React app
   app.use(express.static(path.join(__dirname, '../client/build')));
   
-  // Handle React routing, return all requests to React app
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  // Handle React routing with dynamic OpenGraph meta tags
+  app.get('*', async (req, res) => {
+    const indexPath = path.join(__dirname, '../client/build', 'index.html');
+    let html = fs.readFileSync(indexPath, 'utf8');
+    
+    // Default meta tags
+    let ogTitle = 'Fastt Chat';
+    let ogDescription = 'Fastt Chat - High-performance real-time messaging';
+    let ogImage = '';
+    let ogUrl = `https://${req.get('host')}${req.originalUrl}`;
+    
+    try {
+      // Check if this is a room page
+      const roomSlugMatch = req.path.match(/^\/([a-zA-Z0-9-]+)$/);
+      if (roomSlugMatch && roomSlugMatch[1] !== 'favicon.ico') {
+        const roomSlug = roomSlugMatch[1];
+        const room = await getRoom(roomSlug);
+        if (room) {
+          ogTitle = `${room.title || room.slug} - Fastt Chat`;
+        }
+      }
+      
+      // Check if this is a shared message
+      const messageId = req.query.msg;
+      if (messageId) {
+        const message = await getMessageById(messageId);
+        if (message) {
+          if (message.imageUrl) {
+            ogImage = `https://${req.get('host')}${message.imageUrl}`;
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error generating meta tags:', error);
+    }
+    
+    // Inject meta tags into HTML
+    const metaTags = `
+    <meta property="og:title" content="${ogTitle}" />
+    <meta property="og:description" content="${ogDescription}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="${ogUrl}" />
+    ${ogImage ? `<meta property="og:image" content="${ogImage}" />` : ''}
+    ${ogImage ? `<meta property="og:image:width" content="1200" />` : ''}
+    ${ogImage ? `<meta property="og:image:height" content="630" />` : ''}
+    <meta name="twitter:card" content="${ogImage ? 'summary_large_image' : 'summary'}" />
+    <meta name="twitter:title" content="${ogTitle}" />
+    <meta name="twitter:description" content="${ogDescription}" />
+    ${ogImage ? `<meta name="twitter:image" content="${ogImage}" />` : ''}
+    <title>${ogTitle}</title>`;
+    
+    // Replace the title and description in head
+    html = html.replace(/<title>.*?<\/title>/, '');
+    html = html.replace(/<meta name="description"[^>]*>/, '');
+    html = html.replace('</head>', `${metaTags}</head>`);
+    
+    res.send(html);
   });
 } else {
   // In development, serve static files
   const clientBuildPath = path.join(__dirname, '../client/build');
   if (fs.existsSync(clientBuildPath)) {
     app.use(express.static(clientBuildPath));
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(clientBuildPath, 'index.html'));
+    app.get('*', async (req, res) => {
+      const indexPath = path.join(clientBuildPath, 'index.html');
+      let html = fs.readFileSync(indexPath, 'utf8');
+      
+      // Default meta tags
+      let ogTitle = 'Fastt Chat';
+      let ogDescription = 'Fastt Chat - High-performance real-time messaging';
+      let ogImage = '';
+      let ogUrl = `http://${req.get('host')}${req.originalUrl}`;
+      
+      try {
+        // Check if this is a room page
+        const roomSlugMatch = req.path.match(/^\/([a-zA-Z0-9-]+)$/);
+        if (roomSlugMatch && roomSlugMatch[1] !== 'favicon.ico') {
+          const roomSlug = roomSlugMatch[1];
+          const room = await getRoom(roomSlug);
+          if (room) {
+            ogTitle = `${room.title || room.slug} - Fastt Chat`;
+          }
+        }
+        
+        // Check if this is a shared message
+        const messageId = req.query.msg;
+        if (messageId) {
+          const message = await getMessageById(messageId);
+          if (message) {
+            if (message.imageUrl) {
+              ogImage = `http://${req.get('host')}${message.imageUrl}`;
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error generating meta tags:', error);
+      }
+      
+      // Inject meta tags into HTML
+      const metaTags = `
+    <meta property="og:title" content="${ogTitle}" />
+    <meta property="og:description" content="${ogDescription}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="${ogUrl}" />
+    ${ogImage ? `<meta property="og:image" content="${ogImage}" />` : ''}
+    ${ogImage ? `<meta property="og:image:width" content="1200" />` : ''}
+    ${ogImage ? `<meta property="og:image:height" content="630" />` : ''}
+    <meta name="twitter:card" content="${ogImage ? 'summary_large_image' : 'summary'}" />
+    <meta name="twitter:title" content="${ogTitle}" />
+    <meta name="twitter:description" content="${ogDescription}" />
+    ${ogImage ? `<meta name="twitter:image" content="${ogImage}" />` : ''}
+    <title>${ogTitle}</title>`;
+      
+      // Replace the title and description in head
+      html = html.replace(/<title>.*?<\/title>/, '');
+      html = html.replace(/<meta name="description"[^>]*>/, '');
+      html = html.replace('</head>', `${metaTags}</head>`);
+      
+      res.send(html);
     });
   }
 }
