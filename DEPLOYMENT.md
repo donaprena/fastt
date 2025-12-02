@@ -1,5 +1,30 @@
 # Deployment Guide
 
+## Quick Production Launch
+
+### Automated Production Setup (Recommended)
+```bash
+# 1. Clone the repository
+git clone https://github.com/donaprena/fastt.git
+cd fastt
+
+# 2. Run the setup script (installs Node.js, npm, PM2)
+chmod +x setup-ec2.sh
+./setup-ec2.sh
+
+# 3. Edit the launch script with your email for SSL certificates
+nano launch-production.sh
+# Change: EMAIL="your-email@example.com" to your actual email
+
+# 4. Launch to production (sets up Nginx, SSL, and deploys)
+chmod +x launch-production.sh
+./launch-production.sh
+```
+
+**That's it!** Your site will be live at https://fastt.chat
+
+---
+
 ## Initial Setup on EC2
 
 ### 1. Clone the repository
