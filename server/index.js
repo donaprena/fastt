@@ -145,6 +145,43 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
 
 /**
  * @swagger
+ * /api/track-page-view:
+ *   post:
+ *     summary: Track a page view
+ *     tags: [Analytics]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               path:
+ *                 type: string
+ *                 example: "/"
+ *     responses:
+ *       200:
+ *         description: Page view tracked successfully
+ *       500:
+ *         description: Failed to track page view
+ */
+// Track page view endpoint (for client-side tracking)
+app.post('/api/track-page-view', async (req, res) => {
+  try {
+    const { path } = req.body;
+    const userAgent = req.get('user-agent');
+    const ip = req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for'];
+    
+    await trackPageView(path, userAgent, ip);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error tracking page view:', error);
+    res.status(500).json({ error: 'Failed to track page view' });
+  }
+});
+
+/**
+ * @swagger
  * /api/rooms:
  *   get:
  *     summary: Get all rooms

@@ -66,6 +66,18 @@ function App() {
   const navigate = useNavigate();
   const roomId = roomSlug || 'default';
 
+  // Track page view for room/message pages
+  useEffect(() => {
+    if (roomSlug) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const messageId = urlParams.get('msg');
+      const path = messageId ? `/${roomSlug}?msg=${messageId}` : `/${roomSlug}`;
+      
+      axios.post(`${API_URL}/api/track-page-view`, { path })
+        .catch(err => console.error('Error tracking page view:', err));
+    }
+  }, [roomSlug]);
+
   useEffect(() => {
     if (!roomSlug) {
       navigate('/');

@@ -20,6 +20,10 @@ function Homepage() {
 
   useEffect(() => {
     loadRooms();
+    
+    // Track page view for homepage
+    axios.post(`${API_URL}/api/track-page-view`, { path: '/' })
+      .catch(err => console.error('Error tracking page view:', err));
   }, []);
 
   const loadRooms = async () => {
@@ -174,7 +178,7 @@ function Homepage() {
             Open source and free forever
           </p>
           <a 
-            href="https://github.com/yourusername/fastt-chat" 
+            href="https://github.com/donaprena/fastt.git" 
             target="_blank" 
             rel="noopener noreferrer"
             className="footer-github-link"
