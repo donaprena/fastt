@@ -67,8 +67,69 @@ cd ..
 echo ""
 echo "✅ Installation complete!"
 echo ""
+
+# Ask about Nginx setup (only on Ubuntu/Debian)
+if command -v apt-get &> /dev/null; then
+    read -p "Would you like to set up Nginx reverse proxy? (y/N): " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        echo ""
+        echo "📦 Installing Nginx..."
+        sudo apt install -y nginx
+        
+        read -p "Enter your domain name (e.g., fastt.chat): " DOMAIN
+        
+        if [ -n "$DOMAIN" ]; then
+            echo "⚙️  Creating Nginx configuration for $DOMAIN..."
+            
+            sudo tee /etc/nginx/sites-available/fastt > /dev/null <<EOF
+server {
+    listen 80;
+    server_name $DOMAIN www.$DOMAIN;
+
+    location / {
+        proxy_pass http://localhost:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_cache_bypass \$http_upgrade;
+    }
+
+    location /socket.io/ {
+        proxy_pass http://localhost:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    }
+
+    client_max_body_size 10M;
+}
+EOF
+            
+            sudo ln -sf /etc/nginx/sites-available/fastt /etc/nginx/sites-enabled/
+            sudo rm -f /etc/nginx/sites-enabled/default
+            
+            sudo nginx -t && sudo systemctl restart nginx && sudo systemctl enable nginx
+            
+            echo "✅ Nginx configured successfully!"
+            echo ""
+            echo "🔒 To enable SSL, run:"
+            echo "   sudo apt install certbot python3-certbot-nginx"
+            echo "   sudo certbot --nginx -d $DOMAIN -d www.$DOMAIN"
+        fi
+    fi
+fi
+
+echo ""
 echo "Next steps:"
-echo "  1. (Optional) Configure environment: nano .env"
+echo "  1. (Optional) Edit config: nano config.js"
 echo "  2. Launch the app: ./launch.sh"
 echo ""
 
