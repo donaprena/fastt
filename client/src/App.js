@@ -833,7 +833,7 @@ function App() {
               </div>
               <div className="settings-content">
                 <div className="settings-section">
-                  <label htmlFor="custom-name">Custom Name:</label>
+                  <label htmlFor="custom-name">Username:</label>
                   <input
                     id="custom-name"
                     type="text"
@@ -849,9 +849,6 @@ function App() {
                     maxLength={50}
                     autoFocus
                   />
-                  <p className="settings-hint">
-                    Set a custom name to display instead of &quot;User {'{number}'}&quot;
-                  </p>
                 </div>
 
                 <div className="settings-section">

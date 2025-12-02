@@ -117,7 +117,7 @@ function Homepage() {
         
         <div className="homepage-content">
           <div className="homepage-intro">
-            <h2>Quick Fastt Chats</h2>
+            <h2>Fast Chats</h2>
             <p>
               Fastt lets you instantly create and share chat rooms for emergencies. 
               No sign-up required. Just enter a title and get a unique chat room link to share.
