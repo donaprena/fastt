@@ -1,0 +1,235 @@
+.homepage {
+  height: 100vh;
+  height: 100dvh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+}
+
+.homepage-container {
+  width: 100%;
+  max-width: 600px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  margin: 20px 0;
+  min-height: fit-content;
+}
+
+.homepage-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 40px 30px;
+  text-align: center;
+}
+
+.homepage-logo {
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  letter-spacing: -1px;
+}
+
+.homepage-tagline {
+  font-size: 18px;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.homepage-content {
+  padding: 30px;
+}
+
+.homepage-intro {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.homepage-intro h2 {
+  font-size: 24px;
+  color: #333;
+  margin: 0 0 12px 0;
+}
+
+.homepage-intro p {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.homepage-actions {
+  margin-bottom: 40px;
+}
+
+.create-room-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.room-input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.room-input:focus {
+  border-color: #667eea;
+}
+
+.create-button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.create-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.create-button:active {
+  transform: translateY(0);
+}
+
+.create-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.room-visibility-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #667eea;
+}
+
+.toggle-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.toggle-hint {
+  font-size: 12px;
+  color: #999;
+  margin-left: 28px;
+}
+
+.rooms-section {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 30px;
+}
+
+.rooms-section h3 {
+  font-size: 20px;
+  color: #333;
+  margin: 0 0 20px 0;
+}
+
+.loading-text,
+.empty-text {
+  text-align: center;
+  color: #999;
+  padding: 20px;
+}
+
+.rooms-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.room-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.room-card:hover {
+  background: #f0f0f0;
+  border-color: #667eea;
+  transform: translateX(4px);
+}
+
+.room-card-content {
+  flex: 1;
+}
+
+.room-card-content h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 4px 0;
+}
+
+.room-meta {
+  font-size: 14px;
+  color: #999;
+  margin: 0;
+}
+
+.room-arrow {
+  font-size: 20px;
+  color: #667eea;
+  margin-left: 12px;
+}
+
+@media (max-width: 768px) {
+  .homepage-header {
+    padding: 30px 20px;
+  }
+
+  .homepage-logo {
+    font-size: 36px;
+  }
+
+  .homepage-content {
+    padding: 20px;
+  }
+
+  .homepage-intro h2 {
+    font-size: 20px;
+  }
+}
+
