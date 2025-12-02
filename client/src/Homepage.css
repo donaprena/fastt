@@ -38,8 +38,8 @@
 }
 
 .homepage-logo-icon {
-  width: 48px;
-  height: 48px;
+  width: 68px;
+  height: 68px;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
 
@@ -229,6 +229,50 @@
   margin-left: 12px;
 }
 
+/* Footer styles */
+.homepage-footer {
+  padding: 24px 30px;
+  background: #f8f9fa;
+  border-top: 1px solid #e0e0e0;
+  text-align: center;
+  border-radius: 0 0 16px 16px;
+}
+
+.footer-text {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 12px 0;
+}
+
+.footer-github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.footer-github-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.footer-github-link:active {
+  transform: translateY(0);
+}
+
+.github-icon {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
 @media (max-width: 768px) {
   .homepage-header {
     padding: 30px 20px;
@@ -249,6 +293,20 @@
 
   .homepage-intro h2 {
     font-size: 20px;
+  }
+
+  .homepage-footer {
+    padding: 20px;
+  }
+
+  .footer-github-link {
+    font-size: 13px;
+    padding: 8px 16px;
+  }
+
+  .github-icon {
+    width: 18px;
+    height: 18px;
   }
 }
 
