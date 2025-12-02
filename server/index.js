@@ -1133,6 +1133,26 @@ app.get('/admin/api/performance', async (req, res) => {
   }
 });
 
+// Serve static files from React app in production
+if (process.env.NODE_ENV === 'production') {
+  // Serve static files from the React app
+  app.use(express.static(path.join(__dirname, '../client/build')));
+  
+  // Handle React routing, return all requests to React app
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  });
+} else {
+  // In development, serve static files
+  const clientBuildPath = path.join(__dirname, '../client/build');
+  if (fs.existsSync(clientBuildPath)) {
+    app.use(express.static(clientBuildPath));
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(clientBuildPath, 'index.html'));
+    });
+  }
+}
+
 // Initialize database and start server
 initDatabase().then(() => {
   server.listen(PORT, '0.0.0.0', () => {
