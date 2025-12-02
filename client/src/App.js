@@ -81,7 +81,7 @@ function App() {
 
   useEffect(() => {
     if (!roomSlug) {
-      navigate('/');
+      navigate('/start');
       return;
     }
 
@@ -102,7 +102,7 @@ function App() {
         const roomResponse = await axios.get(`${API_URL}/api/rooms/${roomSlug}`);
         if (!roomResponse.data) {
           if (isMounted) {
-            navigate('/');
+            navigate('/start');
           }
           return;
         }
@@ -286,7 +286,7 @@ function App() {
       newSocket.on('room-not-found', (data) => {
         console.warn('Room not found:', data.roomId);
         if (isMounted) {
-          navigate('/');
+          navigate('/start');
         }
       });
 
@@ -778,7 +778,7 @@ function App() {
       });
 
       // Redirect to homepage after deletion
-      navigate('/');
+      navigate('/start');
     } catch (error) {
       console.error('Error deleting room:', error);
       alert(error.response?.data?.error || 'Failed to delete room. Please try again.');
@@ -836,7 +836,7 @@ function App() {
         <header className="chat-header">
           <button 
             className="home-button"
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/start')}
             aria-label="Home"
             title="Home"
           >

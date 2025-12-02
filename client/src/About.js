@@ -1,0 +1,374 @@
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import './About.css';
+
+function About() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Add scroll animation observer
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('.animate-on-scroll').forEach((el) => {
+      observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const features = [
+    {
+      icon: '⚡',
+      title: 'Instant & Anonymous',
+      description: 'No sign-up, no friction. Jump into conversations in seconds.',
+      highlight: 'Zero barriers to entry'
+    },
+    {
+      icon: '🖼️',
+      title: 'Image Sharing',
+      description: 'Share images instantly without creating an account or logging in.',
+      highlight: 'Visual communication'
+    },
+    {
+      icon: '🏠',
+      title: 'Shareable Rooms',
+      description: 'Create unique chat rooms with a single click. Share the link, and you\'re connected.',
+      highlight: 'One link, infinite possibilities'
+    },
+    {
+      icon: '🎯',
+      title: 'Embed Anywhere',
+      description: 'Perfect for communities, events, and workshops. Drop it right into your website.',
+      highlight: 'Community-friendly'
+    },
+    {
+      icon: '🧩',
+      title: 'Open Source',
+      description: 'Full transparency. Inspect the code, contribute, or fork it for your own use.',
+      highlight: 'Built in the open'
+    },
+    {
+      icon: '🛠️',
+      title: 'Self-Hostable',
+      description: 'Privacy matters. Host it on your own infrastructure with complete control.',
+      highlight: 'Your data, your server'
+    }
+  ];
+
+  const useCases = [
+    {
+      title: 'Events & Workshops',
+      description: 'Create temporary chat rooms for conferences, meetups, or training sessions.',
+      icon: '🎪'
+    },
+    {
+      title: 'Micro-Communities',
+      description: 'Build small, focused communities without the overhead of traditional platforms.',
+      icon: '👥'
+    },
+    {
+      title: 'Emergency Coordination',
+      description: 'Quick communication channels for time-sensitive situations.',
+      icon: '🚨'
+    },
+    {
+      title: 'Collaborative Projects',
+      description: 'Spontaneous team chat for brainstorming and real-time collaboration.',
+      icon: '💡'
+    }
+  ];
+
+  return (
+    <div className="about-page">
+      <Helmet>
+        <title>About - Fastt Chat | The Fastest No-Signup Chat</title>
+        <meta name="description" content="Fastt Chat is the fastest, anonymous, no-signup chat platform for communities, events, and spontaneous collaboration. Open-source and privacy-first." />
+        <meta property="og:title" content="About Fastt Chat - Anonymous Real-Time Chat" />
+        <meta property="og:description" content="The fastest no-signup chat for communities. Instant rooms, image sharing, and complete privacy." />
+        <meta property="og:type" content="website" />
+      </Helmet>
+
+      {/* Navigation */}
+      <nav className="about-nav">
+        <button 
+          className="nav-home-button"
+          onClick={() => navigate('/')}
+          aria-label="Home"
+        >
+          <svg className="nav-logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <path d="M 70 30 L 30 50 L 42 54 L 46 70 L 55 55 L 70 30 Z" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+            <path d="M 42 54 L 55 55" stroke="currentColor" strokeWidth="2"/>
+          </svg>
+          <span className="nav-logo-text">Fastt</span>
+        </button>
+        <button 
+          className="nav-cta-button"
+          onClick={() => navigate('/start')}
+        >
+          Start Chatting
+        </button>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="about-hero">
+        <div className="hero-content animate-on-scroll">
+          <div className="hero-badge">🚀 No Login Required</div>
+          <h1 className="hero-title">
+            The Fastest
+            <br />
+            <span className="hero-title-highlight">No-Signup Chat</span>
+            <br />
+            For Communities
+          </h1>
+          <p className="hero-description">
+            Instant, anonymous real-time chat. Drop-in group rooms for events, workshops, 
+            and spontaneous collaboration. Privacy-first, open-source, and blazingly fast.
+          </p>
+          <div className="hero-buttons">
+            <button 
+              className="hero-primary-button"
+              onClick={() => navigate('/start')}
+            >
+              Create a Chat Room
+              <span className="button-arrow">→</span>
+            </button>
+            <a 
+              href="https://github.com/yourusername/fastt-chat" 
+              className="hero-secondary-button"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              View on GitHub
+            </a>
+          </div>
+        </div>
+        <div className="hero-visual animate-on-scroll">
+          <div className="floating-card card-1">
+            <div className="card-header">
+              <div className="card-dot"></div>
+              <div className="card-dot"></div>
+              <div className="card-dot"></div>
+            </div>
+            <div className="card-content">
+              <div className="message-bubble">Hey everyone! 👋</div>
+              <div className="message-bubble">Welcome to the chat</div>
+            </div>
+          </div>
+          <div className="floating-card card-2">
+            <div className="card-header">
+              <div className="card-dot"></div>
+              <div className="card-dot"></div>
+              <div className="card-dot"></div>
+            </div>
+            <div className="card-content">
+              <div className="stat">⚡ <span>&lt; 100ms</span></div>
+              <div className="stat-label">Message Delivery</div>
+            </div>
+          </div>
+          <div className="floating-card card-3">
+            <div className="card-header">
+              <div className="card-dot"></div>
+              <div className="card-dot"></div>
+              <div className="card-dot"></div>
+            </div>
+            <div className="card-content">
+              <div className="stat">🔒 <span>Zero</span></div>
+              <div className="stat-label">Personal Data Collected</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Grid */}
+      <section className="about-section features-section">
+        <div className="section-header animate-on-scroll">
+          <h2 className="section-title">Built for Speed & Privacy</h2>
+          <p className="section-description">
+            Everything you need for instant, anonymous communication. Nothing you don't.
+          </p>
+        </div>
+        <div className="features-grid">
+          {features.map((feature, index) => (
+            <div 
+              key={index} 
+              className="feature-card animate-on-scroll"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <div className="feature-icon">{feature.icon}</div>
+              <h3 className="feature-title">{feature.title}</h3>
+              <p className="feature-description">{feature.description}</p>
+              <span className="feature-highlight">{feature.highlight}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Use Cases */}
+      <section className="about-section use-cases-section">
+        <div className="section-header animate-on-scroll">
+          <h2 className="section-title">Perfect For</h2>
+          <p className="section-description">
+            Real people, real situations, real conversations.
+          </p>
+        </div>
+        <div className="use-cases-grid">
+          {useCases.map((useCase, index) => (
+            <div 
+              key={index} 
+              className="use-case-card animate-on-scroll"
+              style={{ animationDelay: `${index * 0.15}s` }}
+            >
+              <div className="use-case-icon">{useCase.icon}</div>
+              <h3 className="use-case-title">{useCase.title}</h3>
+              <p className="use-case-description">{useCase.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="about-section how-it-works-section">
+        <div className="section-header animate-on-scroll">
+          <h2 className="section-title">How It Works</h2>
+          <p className="section-description">
+            Three steps to instant communication
+          </p>
+        </div>
+        <div className="steps-container">
+          <div className="step animate-on-scroll">
+            <div className="step-number">1</div>
+            <div className="step-content">
+              <h3>Create a Room</h3>
+              <p>Give it a name. No email, no password, no nonsense.</p>
+            </div>
+          </div>
+          <div className="step-connector"></div>
+          <div className="step animate-on-scroll">
+            <div className="step-number">2</div>
+            <div className="step-content">
+              <h3>Share the Link</h3>
+              <p>Copy the unique URL and share it however you want.</p>
+            </div>
+          </div>
+          <div className="step-connector"></div>
+          <div className="step animate-on-scroll">
+            <div className="step-number">3</div>
+            <div className="step-content">
+              <h3>Start Chatting</h3>
+              <p>Real-time messages, image sharing, and complete anonymity.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Section */}
+      <section className="about-section why-section">
+        <div className="why-content animate-on-scroll">
+          <div className="why-text">
+            <h2 className="section-title">Why Fastt Chat?</h2>
+            <p className="why-description">
+              Because communication shouldn't require creating yet another account, 
+              remembering another password, or surrendering your privacy.
+            </p>
+            <div className="why-points">
+              <div className="why-point">
+                <span className="why-point-icon">✓</span>
+                <span>No data collection or tracking</span>
+              </div>
+              <div className="why-point">
+                <span className="why-point-icon">✓</span>
+                <span>Open source and auditable</span>
+              </div>
+              <div className="why-point">
+                <span className="why-point-icon">✓</span>
+                <span>Self-hostable for complete control</span>
+              </div>
+              <div className="why-point">
+                <span className="why-point-icon">✓</span>
+                <span>Built for temporary, spontaneous communication</span>
+              </div>
+            </div>
+          </div>
+          <div className="why-visual">
+            <div className="comparison-card">
+              <div className="comparison-header traditional">Traditional Chat</div>
+              <div className="comparison-items">
+                <div className="comparison-item negative">Sign up required</div>
+                <div className="comparison-item negative">Email verification</div>
+                <div className="comparison-item negative">Data harvesting</div>
+                <div className="comparison-item negative">Complex setup</div>
+              </div>
+            </div>
+            <div className="vs-divider">VS</div>
+            <div className="comparison-card">
+              <div className="comparison-header fastt">Fastt Chat</div>
+              <div className="comparison-items">
+                <div className="comparison-item positive">Instant access</div>
+                <div className="comparison-item positive">Zero friction</div>
+                <div className="comparison-item positive">Privacy first</div>
+                <div className="comparison-item positive">One click</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="about-section cta-section">
+        <div className="cta-content animate-on-scroll">
+          <h2 className="cta-title">Ready to start chatting?</h2>
+          <p className="cta-description">
+            Create your first room in seconds. No sign-up required.
+          </p>
+          <button 
+            className="cta-button"
+            onClick={() => navigate('/start')}
+          >
+            Create a Chat Room Now
+            <span className="button-arrow">→</span>
+          </button>
+          <p className="cta-note">
+            Free forever • Open source • Privacy-first
+          </p>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="about-footer">
+        <div className="footer-content">
+          <div className="footer-brand">
+            <svg className="footer-logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+              <path d="M 70 30 L 30 50 L 42 54 L 46 70 L 55 55 L 70 30 Z" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+              <path d="M 42 54 L 55 55" stroke="currentColor" strokeWidth="2"/>
+            </svg>
+            <span>Fastt Chat</span>
+          </div>
+          <div className="footer-links">
+            <a href="https://github.com/yourusername/fastt-chat" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <button onClick={() => navigate('/start')}>Start</button>
+            <a href="mailto:hello@fastt.chat">Contact</a>
+          </div>
+          <p className="footer-copyright">
+            Open source and free forever
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+export default About;
+

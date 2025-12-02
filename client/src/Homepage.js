@@ -175,7 +175,20 @@ function Homepage() {
         
         <footer className="homepage-footer">
           <p className="footer-text">
-            Open source and free forever
+            Open source and free forever • <button 
+              onClick={() => navigate('/')} 
+              style={{ 
+                background: 'none', 
+                border: 'none', 
+                color: 'inherit', 
+                cursor: 'pointer', 
+                textDecoration: 'underline',
+                padding: 0,
+                font: 'inherit'
+              }}
+            >
+              Learn more
+            </button>
           </p>
         </footer>
       </div>
